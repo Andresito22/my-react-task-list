@@ -3,7 +3,7 @@ import Task from './Task';
 import { useState } from 'react';
 
 function TaskList() {
-  const [tasks, setTask] = useState([
+  const [tareas, setTask] = useState([
     {name: "Task1", status: false},
     {name: "Task2", status: true},
   ]);
@@ -23,7 +23,7 @@ function TaskList() {
         <button>+</button>
       </div>
       <ul>
-      {tasks.map((task) => (
+      {tareas.map((task) => (
         <li><Task nombre={task.name} estado={task.status}/></li>
       ))}
       </ul>
