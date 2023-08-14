@@ -8,6 +8,14 @@ function TaskList() {
     {name: "Task2", status: true},
   ]);
 
+  useEffect(() => {
+    setTask(JSON.parse(localStorage.getItem("tareas")) || []);
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+  }, [tareas])
+
   return (
     <>
       <div>
