@@ -1,39 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Task from './Task';
+import { useTaskManager } from './UseTaskManager';
+
 
 function TaskList() {
-  const [tasks, setTasks] = useState([]);
+  const { tasks, createTask, deleteTask, updateTaskStatus, clearAllTasks } = useTaskManager();
   const [newTask, setNewTask] = useState('');
 
   useEffect(() => {
-
-    const storedTasks = JSON.parse(localStorage.getItem('tareas'));
-    if (storedTasks) {
-      setTasks(storedTasks);
+    const storedTasks = JSON.parse(localStorage.getItem('tareas')) || [];
+    if (storedTasks.length > 0) {
+      storedTasks.forEach((task) => createTask(task.name));
     }
-  }, []);
+  }, []); 
 
   useEffect(() => {
-
     localStorage.setItem('tareas', JSON.stringify(tasks));
   }, [tasks]);
 
   const handleAddTask = () => {
     if (newTask.trim() === '') {
-      return; 
+      return;
     }
-
-
-    const newTaskObj = { name: newTask, status: false };
-    setTasks([...tasks, newTaskObj]);
-    setNewTask(''); 
+    createTask(newTask);
+    setNewTask('');
   };
 
   const handleTaskChange = (index) => {
- 
-    const updatedTasks = [...tasks];
-    updatedTasks[index].status = !updatedTasks[index].status;
-    setTasks(updatedTasks);
+    updateTaskStatus(index, !tasks[index].status);
+  };
+
+  const handleDeleteTask = (index) => {
+    deleteTask(index);
+  };
+
+  const handleClearAll = () => {
+    clearAllTasks();
   };
 
   return (
@@ -45,18 +47,28 @@ function TaskList() {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
         />
-        
         <button onClick={handleAddTask}>+</button>
+        <button onClick={handleClearAll} className="clear-all-button">Clear All</button>
+       
       </div>
       <ul>
         {tasks.map((task, index) => (
-          <li key={index} onClick={() => handleTaskChange(index)}>
-            <Task nombre={task.name} estado={task.status} />
+          <li key={index} style={{ cursor: 'pointer' }}>
+            <span
+              onClick={() => handleTaskChange(index)}
+              className={task.status ? 'completas' : 'incompletas'}
+            >
+              {task.name}
+            </span>
+            <button onClick={() => handleDeleteTask(index)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
+    
   );
+  
+  
 }
 
 export default TaskList;
