@@ -12,8 +12,7 @@ function App() {
       <Header />
       <TaskList />
       <div>
-      <h2>You have 2 pending tasks</h2>
-      <button>Clear All</button>
+      <h2>You have 0 pending tasks</h2>
       </div>
     </div>
   );

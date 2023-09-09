@@ -2,28 +2,28 @@ import React, { useEffect, useState } from 'react';
 import Task from './Task';
 import { useTaskManager } from './UseTaskManager';
 
-
 function TaskList() {
   const { tasks, createTask, deleteTask, updateTaskStatus, clearAllTasks } = useTaskManager();
-  const [newTask, setNewTask] = useState('');
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newTaskDescription, setNewTaskDescription] = useState('');
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tareas')) || [];
     if (storedTasks.length > 0) {
-      storedTasks.forEach((task) => createTask(task.name));
+      storedTasks.forEach((task) => createTask(task.name, task.description));
     }
-  }, []); 
-
-  useEffect(() => {
-    localStorage.setItem('tareas', JSON.stringify(tasks));
-  }, [tasks]);
+  }, []);
 
   const handleAddTask = () => {
-    if (newTask.trim() === '') {
+    if (newTaskName.trim().length < 3) {
+      // Realiza la validación de que el nombre tenga al menos 3 caracteres
+      alert('El nombre de la tarea debe tener al menos 3 caracteres.');
       return;
     }
-    createTask(newTask);
-    setNewTask('');
+
+    createTask(newTaskName, newTaskDescription);
+    setNewTaskName('');
+    setNewTaskDescription('');
   };
 
   const handleTaskChange = (index) => {
@@ -43,13 +43,18 @@ function TaskList() {
       <div>
         <input
           type="text"
-          placeholder="Nueva tarea"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
+          placeholder="Nombre de la tarea (mínimo 3 caracteres)"
+          value={newTaskName}
+          onChange={(e) => setNewTaskName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Descripción de la tarea (opcional)"
+          value={newTaskDescription}
+          onChange={(e) => setNewTaskDescription(e.target.value)}
         />
         <button onClick={handleAddTask}>+</button>
         <button onClick={handleClearAll} className="clear-all-button">Clear All</button>
-       
       </div>
       <ul>
         {tasks.map((task, index) => (
@@ -60,15 +65,13 @@ function TaskList() {
             >
               {task.name}
             </span>
+            <p>{task.description}</p>
             <button onClick={() => handleDeleteTask(index)}>Eliminar</button>
           </li>
         ))}
       </ul>
     </div>
-    
   );
-  
-  
 }
 
 export default TaskList;
