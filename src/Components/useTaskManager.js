@@ -1,45 +1,55 @@
 import { useState, useEffect } from 'react';
 
-export function useTaskManager(initialTasks = []) {
-  const [tasks, setTasks] = useState(initialTasks);
+function useTaskManager(){
+    const [tasks, setTasks] = useState(getStoredTasks());
 
-  useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem('tareas')) || [];
-    setTasks(storedTasks);
-  }, []);
+    useEffect(()=>{
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    },[tasks])
 
-  const createTask = (taskName) => {
-    const newTask = { name: taskName, status: false };
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    localStorage.setItem('tareas', JSON.stringify(updatedTasks));
-  };
+    function getStoredTasks(){
+        const storedTasks = localStorage.getItem('tasks');
+        return storedTasks ? JSON.parse(storedTasks) : [];
+    }
 
-  const deleteTask = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks.splice(index, 1);
-    setTasks(updatedTasks);
-    localStorage.setItem('tareas', JSON.stringify(updatedTasks));
-  };
+    const createTask = (taskName) => {
+        if (taskName.trim() !== '') {
+            const newTask = { name: taskName, status: false};
+            setTasks((prevTasks) => [...prevTasks, newTask]);
+        }
+    }
 
-  const updateTaskStatus = (index, newStatus) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].status = newStatus;
-    setTasks(updatedTasks);
-    localStorage.setItem('tareas', JSON.stringify(updatedTasks));
-  };
+    const deleteTask = (index) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = [...prevTasks];
+            updatedTasks.splice(index, 1);
+            return updatedTasks;
+        })
+    }
 
-  const clearAllTasks = () => {
-    const updatedTasks = [];
-    setTasks(updatedTasks);
-    localStorage.removeItem('tareas');
-  };
+    const updateTask = (index, updatedTask) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = [...prevTasks];
+            updatedTasks[index] = {
+                ...updatedTasks[index],
+                ...updatedTask,
+            };
+            return updatedTasks;
+        })
+    }
 
-  return {
-    tasks,
-    createTask,
-    deleteTask,
-    updateTaskStatus,
-    clearAllTasks,
-  };
+    const updateTaskStatus = (index) => {
+        setTasks((prevTasks) => {
+          const updatedTasks = [...prevTasks];
+          updatedTasks[index] = {
+            ...updatedTasks[index],
+            status: !updatedTasks[index].status,
+          };
+          return updatedTasks;
+        });
+      };
+
+    return { tasks, createTask, deleteTask, updateTask, updateTaskStatus}
 }
+
+export default useTaskManager

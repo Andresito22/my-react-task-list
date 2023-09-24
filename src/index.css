@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;800&display=swap");
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,26 +26,39 @@ a:hover {
 }
 
 body {
+  font-family:sans-serif;
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  margin: 30% 0 0 ;
+}
+.titulo{
+  color: #007464;
+  margin-top: 10%;
 }
 
-
-.incompletas {
-  text-decoration: line-through;
-}
-.completas {
-  text-decoration: none;
+h2 {
+  font-size: 35px;
+  color: #007464;
 }
 
+.p-home{
+  color: #007464;
+}
+
+.titulo2{
+  color: #df0a03;
+}
+.parrafo1{
+text-align: justify;
+
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -51,7 +66,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: violet;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -75,5 +90,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-
-

@@ -1,21 +1,21 @@
-import "./App.css";
-import TaskList from "./Components/TaskList";
-import Header from "./Components/Header";
-
-
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Menu from './Components/Menu';
+import Home from './pages/Home';
+import SobreNosotros from './pages/SobreNosotros';
+import Tareas from './pages/Tareas';
+import './App.css';
 
 function App() {
- 
   return (
-    <div>
-      <Header />
-      <TaskList />
-      <div>
-      <h2>You have 2 pending tasks</h2>
-      <button>Clear All</button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Menu />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/tareas" element={<Tareas />} />
+        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 export default App;
